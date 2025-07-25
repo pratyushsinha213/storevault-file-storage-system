@@ -10,6 +10,7 @@ import analyticsRouter from './routes/analytics.routes.js';
 import userRouter from './routes/user.routes.js';
 // import redis from './services/redisClient.js';
 import aiRouter from './routes/ai.routes.js';
+import stripeRouter from './routes/stripe.routes.js';
 
 app.use(express.json());
 app.use(cookieParser());
@@ -25,6 +26,7 @@ app.use('/api/v1/files', fileRouter);
 app.use('/api/v1/analytics', analyticsRouter); 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/ai-assistant', aiRouter);
+app.use('/api/v1/payments', stripeRouter);
 
 // app.get('/test-redis', async (req, res) => {
 //   await redis.set('testkey', 'hello');

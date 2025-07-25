@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { JWT_SECRET_KEY } from '../config/env.js';
 import File from '../models/File.js';
+// import { storagePlans } from '../utils/storagePlans.js';
 
 export const registerUser = async (req, res) => {
     try {

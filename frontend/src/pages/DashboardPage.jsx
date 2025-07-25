@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import { FileText, MessageSquare, Database, ShieldCheck } from 'lucide-react';
+import { FileText, MessageSquare, Database, ShieldCheck, Cloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import useAuthStore from '@/store/useAuthStore';
 import formatBytes from '@/utils/formatBytes';
 import { Progress } from '@/components/ui/progress';
 import progressBar from '@/utils/progressBar';
+import { useNavigate } from 'react-router-dom';
 
 const mockUser = {
-    name: 'Pratyush Sinha',
-    email: 'pratyush@example.com',
     avatar: 'https://avatars.githubusercontent.com/u/12345678?v=4',
     lastLogin: '2 hours ago',
 };
@@ -38,11 +37,13 @@ const DashboardPage = () => {
 
 
     const stats = [
-        { icon: FileText, label: 'Files Uploaded', value: userFileDetails?.length, action: 'View Files' },
-        { icon: MessageSquare, label: 'AI Prompts Used', value: 23, action: 'Go to Chat' },
-        { icon: Database, label: 'Storage Used', value: `${formatBytes(totalSize)}/${formatBytes(userDetails?.storageLimit)}`, progressBar: <Progress className={`mt-2`} value={progressBar(totalSize, userDetails?.storageLimit)} />, action: 'Upgrade' },
-        { icon: ShieldCheck, label: 'Auth Status', value: 'Verified', action: 'Manage' },
+        { icon: FileText, label: 'Files Uploaded', value: userFileDetails?.length, action: 'View Files', url: "/files" },
+        { icon: MessageSquare, label: 'AI Prompts Used', value: 23, action: 'Go to Chat', url: "/ai-assistant" },
+        { icon: Database, label: 'Storage Used', value: `${formatBytes(totalSize)}/${formatBytes(userDetails?.storageLimit)}`, progressBar: <Progress className={`mt-2`} value={progressBar(totalSize, userDetails?.storageLimit)} />, percentage: `${Math.round((totalSize / userDetails?.storageLimit) * 100).toFixed(2)}`, action: 'Upgrade', url: "/upgrade-plan" },
+        { icon: Cloud, label: 'Account Storage Tier', value: `${userDetails?.storageTier} Plan`, action: 'More Info', url: "/upgrade-plan" },
     ];
+
+    const navigate = useNavigate();
 
     return (
         <div className="min-h-screen p-6 text-white bg-black">
@@ -62,8 +63,11 @@ const DashboardPage = () => {
                         <stat.icon className="w-6 h-6 mb-2 text-blue-400" />
                         <p className="text-sm text-zinc-400">{stat.label}</p>
                         <h2 className="text-xl font-semibold">{stat.value}</h2>
-                        {stat.progressBar ? stat.progressBar : null}
-                        <Button variant="ghost" size="sm" className="mt-2 text-blue-400 hover:underline">
+                        {stat.progressBar ? stat.progressBar : null} {stat.percentage ? `${stat.percentage}%` : null}
+                        <Button
+                            onClick={() => navigate(stat.url)}
+                            variant="ghost" size="sm" className="mt-2 text-blue-400 hover:underline"
+                        >
                             {stat.action}
                         </Button>
                     </div>

@@ -42,7 +42,30 @@ const userSchema = new mongoose.Schema({
     },
     storageLimit: {
         type: Number, // e.g., 5GB = 5 * 1024 * 1024 * 1024
-        default: 5 * 1024 * 1024 * 1024,
+        default: 5 * 1024 * 1024 * 1024, // Free Tier gives 5GB storage. Can configure that later
+    },
+    storageTier: {
+        type: String,
+        enum: ['Free', 'Pro', 'Team', 'Enterprise'],
+        default: 'Free'
+    },
+    hasUserPaid: {
+        type: Boolean,
+        default: false
+    },
+    paymentHistory: [
+        {
+            type: String,
+            default: null
+        }
+    ],
+    monthlyExpiry: {
+        type: Date,
+        default: null
+    },
+    yearlyExpiry: {
+        type: Date,
+        default: null
     }
 }, {
     timestamps: true

@@ -15,6 +15,8 @@ import AnalyticsPage from './pages/AnalyticsPage'
 import DashboardPage from './pages/DashboardPage'
 import Header from './components/Header'
 import UpgradePlanPage from './pages/UpgradePlanPage'
+import PaymentSuccessPage from './pages/PaymentSuccessPage'
+import PaymentCancelledPage from './pages/PaymentCancelledPage'
 
 
 const App = () => {
@@ -60,10 +62,14 @@ const App = () => {
                             path='/dashboard'
                             element={<DashboardPage />}
                         />
-                        <Route
+                        {/* <Route
                             path='/upgrade-plan'
                             element={<UpgradePlanPage />}
-                        />
+                            
+                        /> */}
+                        <Route path="/upgrade-plan" element={<UpgradePlanPage />} />
+                        <Route path="/upgrade-plan/payments/success" element={<PaymentSuccessPage />} />
+                        <Route path="/upgrade-plan/payments/cancelled" element={<PaymentCancelledPage />} />
                         {/* <Route
                             path='/analytics'
                             element={user ? <AnalyticsPage /> : <Navigate to="/" />}
