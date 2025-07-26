@@ -11,6 +11,20 @@ const generateUniqueFileName = (originalname) => {
     return uniqueName;
 }
 
+export const formatBytes = (bytes, decimals = 2) => {
+    if (bytes === 0) return '0 B';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    const formatted = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+
+    return `${formatted} ${sizes[i]}`;
+}
+
 export const uploadFile = async (req, res) => {
     try {
         console.log(req.file);
@@ -22,11 +36,21 @@ export const uploadFile = async (req, res) => {
         const { originalname, mimetype, size, buffer } = req.file;
 
         // Fetch user details
-        const user = await User.findById(userId).select('fullName');
+        const user = await User.findById(userId).select('fullName storageUsed storageLimit storageTier');
+
+        const availableStorage = user.storageLimit - user.storageUsed;
+        if (size > availableStorage) {
+            return res.status(403).json({
+                message: `Upload failed. You've exceeded your storage limit. You have ${formatBytes(availableStorage)} left. Either upgrade your plan or delete existing files.`
+            });
+        }
+
+        // Update user's storage used on mongodb
+        user.storageUsed += size;
+        await user.save();
 
         // Generate a unique file name (uuid + original extension)
         const uniqueName = generateUniqueFileName(originalname);
-
         // S3 key: you can organize by user or folder if desired
         const s3Key = `uploads/${userId}-${user.fullName.split(' ')[0]}/${uniqueName}`;
         // Upload to S3
@@ -49,12 +73,12 @@ export const uploadFile = async (req, res) => {
         });
         // Enqueue AI summarization/classification job
         // Comment out the next line if you want to disable AI jobs
-        await aiQueue.add('summarize', {
-            fileId: fileDoc._id.toString(),
-            s3Key: fileDoc.path,
-            mimeType: fileDoc.mimeType,
-            originalname: fileDoc.name
-        });
+        // await aiQueue.add('summarize', {
+        //     fileId: fileDoc._id.toString(),
+        //     s3Key: fileDoc.path,
+        //     mimeType: fileDoc.mimeType,
+        //     originalname: fileDoc.name
+        // });
 
         return res.status(201).json({
             message: 'File uploaded successfully',
@@ -99,17 +123,28 @@ export const getAllFiles = async (req, res) => {
         const files = await File.find({ ownerId: userId }).sort({ createdAt: -1 });
 
         // For each file, generate signed URLs for download and view using Promise.all
-        const updatedFileData = await Promise.all(files.map(async (file) => {
-            const viewUrl = await getSignedUrlFromS3(file.path, 3600, 'inline', file.name);
-            const downloadUrl = await getSignedUrlFromS3(file.path, 3600, 'attachment', file.name);
+        const updatedFileData = await Promise.all(
+            files.map(async (file) => {
+                // 🛑 Skip signed URL generation for folders
+                if (file.isFolder) {
+                    return {
+                        ...file._doc,
+                        viewUrl: null,
+                        downloadUrl: null,
+                    };
+                }
 
-            return {
-                ...file._doc,      // copy file data
-                viewUrl,
-                downloadUrl
-            };
-        }));
+                // ✅ Generate signed URLs only for actual files
+                const viewUrl = await getSignedUrlFromS3(file.path, 3600, 'inline', file.name);
+                const downloadUrl = await getSignedUrlFromS3(file.path, 3600, 'attachment', file.name);
 
+                return {
+                    ...file._doc,
+                    viewUrl,
+                    downloadUrl,
+                };
+            })
+        );
         return res.status(200).json({
             message: 'Files retrieved successfully',
             data: updatedFileData
@@ -134,7 +169,7 @@ export const updateFile = async (req, res) => {
         return res.status(403).json({ message: 'You do not have permission to update this file' });
     }
 
-    
+
 
     return res.status(501).json({ message: 'Update file functionality not implemented yet' });
 }
@@ -157,6 +192,10 @@ export const deleteFile = async (req, res) => {
         // First delete from S3 then proceed to delete from MongoDB
         await deleteFromS3(fileDoc.path);
         const deletedUser = await File.findByIdAndDelete(fileId);
+        const user = await User.findById(userId);
+
+        user.storageUsed -= fileDoc.size;
+        await user.save();
 
         return res.status(200).json({
             message: 'File deleted successfully',
@@ -166,3 +205,105 @@ export const deleteFile = async (req, res) => {
 
     }
 }
+
+export const upgradePlanCheck = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { newTier } = req.body;
+
+        const tierLimits = {
+            "Free": 5 * 1024 * 1024,          // 5MB
+            "Pro": 100 * 1024 * 1024,         // 100MB
+            "Team": 1024 * 1024 * 1024,       // 1GB
+            "Enterprise": 5 * 1024 * 1024 * 1024 // 5GB
+        };
+
+        if (!tierLimits[newTier]) {
+            return res.status(400).json({ message: 'Invalid tier' });
+        }
+
+        const user = await User.findById(userId);
+        const newLimit = tierLimits[newTier];
+
+        // Prevent downgrade if over limit
+        if (user.storageUsed > newLimit) {
+            return res.status(400).json({
+                message: `Cannot downgrade to ${newTier} plan. You're currently using ${formatBytes(user.storageUsed)} and the limit is ${formatBytes(newLimit)}. Please delete some files first.`
+            });
+        }
+
+        return res.status(200).json({ message: '' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Plan update failed', error: error.message });
+    }
+};
+
+
+// export const createFolder = async (req, res) => {
+//     try {
+//         const { name, parentFolderId } = req.body;
+//         const userId = req.user.id;
+
+//         // Find parent folder to determine path
+//         let applicationPath = 'root';
+//         if (parentFolderId) {
+//             const parent = await File.findById(parentFolderId);
+//             if (!parent || !parent.isFolder) {
+//                 return res.status(400).json({ message: "Invalid parent folder." });
+//             }
+//             applicationPath = `${parent.applicationPath}/${parent.name}`;
+//         }
+
+//         const folderDoc = await File.create({
+//             ownerId: userId,
+//             name,
+//             isFolder: true,
+//             folderId: parentFolderId || null,
+//             applicationPath
+//         });
+
+//         return res.status(201).json({ message: "Folder created successfully", data: folderDoc });
+//     } catch (error) {
+//         return res.status(500).json({ message: "Failed to create folder", error: error.message });
+//     }
+// };
+
+// POST /files/folders
+export const createFolder = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { name } = req.body;
+
+        const newFolder = await File.create({
+            ownerId: userId,
+            name,
+            isFolder: true,
+            applicationPath: "root"
+        });
+
+        return res.status(201).json({ message: "Folder created", data: newFolder });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to create folder", error: error.message });
+    }
+};
+
+// PATCH /files/folders/:id
+export const renameFolder = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { id } = req.params;
+        const { name } = req.body;
+
+        const folder = await File.findById(id);
+        if (!folder || !folder.isFolder) {
+            return res.status(404).json({ message: "Folder not found" });
+        }
+
+        folder.name = name;
+        await folder.save();
+
+        return res.status(200).json({ message: "Folder renamed", data: folder });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to rename folder", error: error.message });
+    }
+};

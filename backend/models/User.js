@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 6,
     },
+    image: {
+        type: String,
+        default: null
+    },
     role: {
         type: String,
         enum: ['user', 'admin'],
@@ -42,7 +46,8 @@ const userSchema = new mongoose.Schema({
     },
     storageLimit: {
         type: Number, // e.g., 5GB = 5 * 1024 * 1024 * 1024
-        default: 5 * 1024 * 1024 * 1024, // Free Tier gives 5GB storage. Can configure that later
+        // default: 5 * 1024 * 1024 * 1024, // Free Tier gives 5GB storage. Can configure that later
+        default: 5 * 1024 * 1024, // Free Tier gives 5MB storage. This is for testing purposes
     },
     storageTier: {
         type: String,

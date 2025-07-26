@@ -6,25 +6,44 @@ const fileSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    type: {
+        type: String,
+        enum: ['file', 'folder'],
+        default: 'file'
+    },
     name: {
         type: String,
         required: true
     },
+    isFolder: {
+        type: Boolean,
+        default: false
+    },
     path: {
         type: String,
-        required: true // S3 object key or full path
+        required: function () {
+            return !this.isFolder; // folders don’t need S3 path
+        }
+    },
+    applicationPath: {
+        type: String // e.g., "root/documents/personal"
     },
     size: {
         type: Number,
-        required: true
+        required: function () {
+            return !this.isFolder;
+        },
+        default: 0
     },
     mimeType: {
         type: String,
-        required: true
+        required: function () {
+            return !this.isFolder;
+        }
     },
     folderId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'File', // For folder hierarchy (self-reference)
+        ref: 'File',
         default: null
     },
     version: {

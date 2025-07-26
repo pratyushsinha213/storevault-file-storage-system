@@ -19,14 +19,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import useAuthStore from "@/store/useAuthStore"
 import { Button } from "./ui/button"
 import { Link, Navigate, useNavigate } from "react-router-dom"
+import { getInitialsFromName } from "@/utils/getInitialsFromName"
 
 // Menu items.
 const items = [
-    {
-        title: "Dashboard",
-        url: "/dashboard",
-        icon: IconDashboard,
-    },
+    // {
+    //     title: "Dashboard",
+    //     url: "/dashboard",
+    //     icon: IconDashboard,
+    // },
     {
         title: "Analytics",
         url: "/analytics",
@@ -44,13 +45,6 @@ const items = [
     },
 ]
 
-const tempUser = {
-    name: "John Doe",
-    email: "7mPnM@example.com",
-    avatar: "https://avatars.githubusercontent.com/u/12345678?v=4",
-
-}
-
 const AppSidebar = () => {
     const { isMobile } = useSidebar();
     const { user, logoutUser } = useAuthStore();
@@ -63,7 +57,7 @@ const AppSidebar = () => {
             navigate("/");
         }
     }
-
+        
     return (
         <>
             <Sidebar>
@@ -112,8 +106,8 @@ const AppSidebar = () => {
                                         size="lg"
                                         className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                                         <Avatar className="w-8 h-8 rounded-lg grayscale">
-                                            <AvatarImage src={tempUser.avatar} alt={user?.fullName} />
-                                            <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                            <AvatarImage src={user?.image} alt={user?.fullName} />
+                                            <AvatarFallback className="rounded-lg">{getInitialsFromName(user?.fullName)}</AvatarFallback>
                                         </Avatar>
                                         <div className="grid flex-1 text-sm leading-tight text-left">
                                             <span className="font-medium truncate">{user?.fullName}</span>
@@ -132,8 +126,8 @@ const AppSidebar = () => {
                                     <DropdownMenuLabel className="p-0 font-normal">
                                         <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                             <Avatar className="w-8 h-8 rounded-lg">
-                                                <AvatarImage src={tempUser.avatar} alt={user?.fullName} />
-                                                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                                <AvatarImage src={user?.image} alt={user?.fullName} />
+                                                <AvatarFallback className="rounded-lg">{getInitialsFromName(user?.fullName)}</AvatarFallback>
                                             </Avatar>
                                             <div className="grid flex-1 text-sm leading-tight text-left">
                                                 <span className="font-medium truncate">{user?.fullName}</span>

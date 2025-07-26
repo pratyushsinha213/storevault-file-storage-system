@@ -54,7 +54,6 @@ export const successPayment = async (req, res) => {
             stripe.checkout.sessions.retrieve(req.query.session_id)
         ]);
 
-
         // Optional: verify payment is complete
         if (session.payment_status !== "paid") {
             return res.status(400).json({ message: "Payment not completed" });
@@ -78,6 +77,7 @@ export const successPayment = async (req, res) => {
         const planName = lineItems.data[0].description.split(" ")[0]; // e.g. 'Pro Plan' -> 'Pro'
         const chosenPlan = storagePlans[planName];
 
+
         if (!chosenPlan) {
             return res.status(400).json({ message: "Invalid plan from Stripe session" });
         }
@@ -90,16 +90,35 @@ export const successPayment = async (req, res) => {
         user.paymentHistory.push(req.query.session_id);
         user.storageTier = planName;
         user.hasUserPaid = chosenPlan === 'Free' ? false : true;
-        user.storageLimit = chosenPlan.storage * 1024 * 1024 * 1024; // Convert GB to bytes
+        // user.storageLimit = chosenPlan.storage * 1024 * 1024 * 1024; // Convert GB to bytes
+        user.storageLimit = chosenPlan.storage * 1024 * 1024; // Convert MB to bytes
 
         await user.save();
 
         return res.status(200).json({ message: "Plan upgraded successfully", plan: planName, user });
     } catch (error) {
-        return res.status(500).json({ message: "Error verifying payment", error: error.message });
+        // return res.status(500).json({ message: "Error verifying payment", error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 
 export const cancelledPayment = async (req, res) => {
-    // implement stripe cancelled logic here
-}
+    const sessionId = req.query.session_id;
+
+    if (!sessionId) {
+        return res.status(400).json({ message: "Missing session ID" });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    // Optional: Check session status
+    if (session.payment_status === "paid") {
+        return res.status(400).json({
+            message: "This session was actually paid. Please do not use the cancelled route.",
+        });
+    }
+
+    return res.status(200).json({
+        message: "Payment was cancelled. No changes were made to your account.",
+    });
+};

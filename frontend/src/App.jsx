@@ -58,14 +58,9 @@ const App = () => {
                             path='/ai-assistant'
                             element={<AIChatPage />}
                         />
-                        <Route
+                        {/* <Route
                             path='/dashboard'
                             element={<DashboardPage />}
-                        />
-                        {/* <Route
-                            path='/upgrade-plan'
-                            element={<UpgradePlanPage />}
-                            
                         /> */}
                         <Route path="/upgrade-plan" element={<UpgradePlanPage />} />
                         <Route path="/upgrade-plan/payments/success" element={<PaymentSuccessPage />} />

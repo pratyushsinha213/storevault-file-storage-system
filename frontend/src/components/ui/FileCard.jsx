@@ -1,5 +1,6 @@
 import React from 'react';
 import { Eye, Download, Trash2 } from 'lucide-react';
+import formatBytes from '@/utils/formatBytes';
 
 const FileCard = ({ file, onDelete }) => {
     const isImage = file.mimeType.startsWith('image/');
@@ -60,7 +61,7 @@ const FileCard = ({ file, onDelete }) => {
             {/* Footer */}
             <div className="flex flex-col gap-1 p-4 text-white">
                 <p className="font-medium truncate">{file.name}</p>
-                <p className="text-xs text-zinc-400">{(file.size / 1024).toFixed(2)} KB</p>
+                <p className="text-xs text-zinc-400">{formatBytes(file.size)}</p>
             </div>
         </div>
     );

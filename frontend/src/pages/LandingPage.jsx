@@ -1,10 +1,12 @@
 import Header from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ArrowRight, CirclePlay } from "lucide-react";
+import { ArrowUpRight, ArrowRight, CirclePlay, BarChart2, CloudUpload, Settings } from "lucide-react";
 import { Particles } from "@/components/ui/particles";
 import Footer from "@/components/footer";
 import { Link } from "react-router-dom";
+import DashboardPage from "./DashboardPage";
+
 
 const features = [
     {
@@ -45,16 +47,20 @@ const features = [
 ];
 
 const LandingPage = ({ isUserLoggedIn }) => {
+
     return (
         <>
             {isUserLoggedIn ? (
-                <div className="flex flex-col min-h-screen">
-                    <Header isUserLoggedIn />
-                    <div className="flex-1">
-                        {/* Main content here */}
-                    </div>
-                    <Footer />
-                </div>
+                <>
+                    <Particles
+                        className="absolute inset-0 pointer-events-none"
+                        quantity={100}
+                        ease={80}
+                        color={"#fff"}
+                        refresh
+                    />
+                    <DashboardPage />
+                </>
             ) : (
                 <div className="flex flex-col min-h-screen text-primary">
                     <Header />

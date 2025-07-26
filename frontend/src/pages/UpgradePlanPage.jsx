@@ -19,111 +19,51 @@
 // };
 
 // const YEARLY_DISCOUNT = 20;
-// // const plans = [
-// //     {
-// //         name: "Free",
-// //         price: 0,
-// //         description:
-// //             "Includes 5 GB of storage, 25 MB per-file upload limit, and basic folder organization. Ideal for personal use and testing.",
-// //         features: [
-// //             { title: "5 hours turnaround time" },
-// //             { title: "20 AI portraits" },
-// //             { title: "Choice of 2 styles", tooltip: tooltipContent.styles },
-// //             { title: "Choice of 2 filters", tooltip: tooltipContent.filters },
-// //             { title: "2 retouch credits", tooltip: tooltipContent.credits },
-// //         ],
-// //         buttonText: "Get 20 portraits in 5 hours",
-// //     },
-// //     {
-// //         name: "Advanced",
-// //         price: 40,
-// //         isRecommended: true,
-// //         description:
-// //             "Get 50 AI-generated portraits with 5 unique styles and filters.",
-// //         features: [
-// //             { title: "3 hours turnaround time" },
-// //             { title: "50 AI portraits" },
-// //             { title: "Choice of 5 styles", tooltip: tooltipContent.styles },
-// //             { title: "Choice of 5 filters", tooltip: tooltipContent.filters },
-// //             { title: "5 retouch credits", tooltip: tooltipContent.credits },
-// //         ],
-// //         buttonText: "Get 50 portraits in 3 hours",
-// //         isPopular: true,
-// //     },
-// //     {
-// //         name: "Premium",
-// //         price: 80,
-// //         description:
-// //             "Get 100 AI-generated portraits with 10 unique styles and filters.",
-// //         features: [
-// //             { title: "1-hour turnaround time" },
-// //             { title: "100 AI portraits" },
-// //             { title: "Choice of 10 styles", tooltip: tooltipContent.styles },
-// //             { title: "Choice of 10 filters", tooltip: tooltipContent.filters },
-// //             { title: "10 retouch credits", tooltip: tooltipContent.credits },
-// //         ],
-// //         buttonText: "Get 100 portraits in 1 hour",
-// //     },
-// // ];
-
 // const plans = [
-//   {
-//     name: "Free",
-//     price: 0,
-//     description:
-//       "Includes 5 GB of storage, 25 MB per-file upload limit, and basic folder organization. Ideal for personal use and testing.",
-//     features: [
-//       { title: "5 GB storage" },
-//       { title: "25 MB max file upload" },
-//       { title: "Basic folder organization" },
-//       { title: "Suitable for personal use" },
-//     ],
-//     buttonText: "Start for Free",
-//   },
-//   {
-//     name: "Pro",
-//     price: 9.99,
-//     description:
-//       "Includes 100 GB of storage, 500 MB per-file upload limit, file versioning, and priority upload speed. Great for freelancers.",
-//     features: [
-//       { title: "100 GB storage" },
-//       { title: "500 MB max file upload" },
-//       { title: "File versioning" },
-//       { title: "Priority upload speed" },
-//       { title: "Designed for freelancers" },
-//     ],
-//     buttonText: "Upgrade to Pro",
-//     isRecommended: true,
-//   },
-//   {
-//     name: "Team",
-//     price: 19.99,
-//     description:
-//       "Includes 1 TB shared storage, 1 GB per-file upload limit, team collaboration tools, admin controls, and audit logs.",
-//     features: [
-//       { title: "1 TB shared storage" },
-//       { title: "1 GB max file upload" },
-//       { title: "Team collaboration tools" },
-//       { title: "Admin controls" },
-//       { title: "Audit logging" },
-//     ],
-//     buttonText: "Upgrade to Team",
-//     isPopular: true,
-//   },
-//   {
-//     name: "Enterprise",
-//     price: 49.99,
-//     description:
-//       "Custom storage limits, unlimited upload size, advanced security features, analytics, and dedicated support. Tailored for large organizations.",
-//     features: [
-//       { title: "Custom storage limits" },
-//       { title: "Unlimited upload size" },
-//       { title: "Advanced security features" },
-//       { title: "Usage analytics" },
-//       { title: "Dedicated support" },
-//     ],
-//     buttonText: "Contact Sales",
-//   },
+//     {
+//         name: "Free",
+//         price: 0,
+//         description:
+//             "Includes 5 GB of storage, 25 MB per-file upload limit, and basic folder organization. Ideal for personal use and testing.",
+//         features: [
+//             { title: "5 hours turnaround time" },
+//             { title: "20 AI portraits" },
+//             { title: "Choice of 2 styles", tooltip: tooltipContent.styles },
+//             { title: "Choice of 2 filters", tooltip: tooltipContent.filters },
+//             { title: "2 retouch credits", tooltip: tooltipContent.credits },
+//         ],
+//         buttonText: "Get 20 portraits in 5 hours",
+//     },
+//     {
+//         name: "Advanced",
+//         price: 40,
+//         isRecommended: true,
+//         description:
+//             "Get 50 AI-generated portraits with 5 unique styles and filters.",
+//         features: [
+//             { title: "3 hours turnaround time" },
+//             { title: "50 AI portraits" },
+//             { title: "Choice of 5 styles", tooltip: tooltipContent.styles },
+//             { title: "Choice of 5 filters", tooltip: tooltipContent.filters },
+//             { title: "5 retouch credits", tooltip: tooltipContent.credits },
+//         ],
+//         buttonText: "Get 50 portraits in 3 hours",
+//         isPopular: true,
+//     },
+//     {
+//         name: "Premium",
+//         price: 80,
+//         description:
+//             "Get 100 AI-generated portraits with 10 unique styles and filters.",
+//         features: [
+//             { title: "1-hour turnaround time" },
+//             { title: "100 AI portraits" },
+//             { title: "Choice of 10 styles", tooltip: tooltipContent.styles },
+//             { title: "Choice of 10 filters", tooltip: tooltipContent.filters },
+//             { title: "10 retouch credits", tooltip: tooltipContent.credits },
+//         ],
+//         buttonText: "Get 100 portraits in 1 hour",
+//     },
 // ];
 
 // const UpgradePlanPage = () => {
@@ -223,68 +163,68 @@ import useAuthStore from "@/store/useAuthStore"; // <-- import your auth/payment
 const YEARLY_DISCOUNT = 5;
 
 const plans = [
-  {
-    name: "Free",
-    price: 0,
-    description:
-      "Includes 5 GB of storage, 25 MB per-file upload limit, and basic folder organization. Ideal for personal use and testing.",
-    features: [
-      { title: "5 GB storage" },
-      { title: "25 MB max file upload" },
-      { title: "Basic folder organization" },
-      { title: "Suitable for personal use" },
-    ],
-    buttonText: "Start for Free",
-  },
-  {
-    name: "Pro",
-    price: 9.99,
-    description:
-      "Includes 100 GB of storage, 500 MB per-file upload limit, file versioning, and priority upload speed. Great for freelancers.",
-    features: [
-      { title: "100 GB storage" },
-      { title: "500 MB max file upload" },
-      { title: "File versioning" },
-      { title: "Priority upload speed" },
-      { title: "Designed for freelancers" },
-    ],
-    buttonText: "Upgrade to Pro",
-    isRecommended: true,
-  },
-  {
-    name: "Team",
-    price: 19.99,
-    description:
-      "Includes 1 TB shared storage, 1 GB per-file upload limit, team collaboration tools, admin controls, and audit logs.",
-    features: [
-      { title: "1 TB shared storage" },
-      { title: "1 GB max file upload" },
-      { title: "Team collaboration tools" },
-      { title: "Admin controls" },
-      { title: "Audit logging" },
-    ],
-    buttonText: "Upgrade to Team",
-    isPopular: true,
-  },
-  {
-    name: "Enterprise",
-    price: 49.99,
-    description:
-      "Custom storage limits, unlimited upload size, advanced security features, analytics, and dedicated support. Tailored for large organizations.",
-    features: [
-      { title: "Custom storage limits" },
-      { title: "Unlimited upload size" },
-      { title: "Advanced security features" },
-      { title: "Usage analytics" },
-      { title: "Dedicated support" },
-    ],
-    buttonText: "Contact Sales",
-  },
+    {
+        name: "Free",
+        price: 0,
+        description:
+            "Includes 5 GB of storage, 25 MB per-file upload limit, and basic folder organization. Ideal for personal use and testing.",
+        features: [
+            { title: "5 GB storage" },
+            { title: "25 MB max file upload" },
+            { title: "Basic folder organization" },
+            { title: "Suitable for personal use" },
+        ],
+        buttonText: "Start for Free",
+    },
+    {
+        name: "Pro",
+        price: 9.99,
+        description:
+            "Includes 100 GB of storage, 500 MB per-file upload limit, file versioning, and priority upload speed. Great for freelancers.",
+        features: [
+            { title: "100 GB storage" },
+            { title: "500 MB max file upload" },
+            { title: "File versioning" },
+            { title: "Priority upload speed" },
+            { title: "Designed for freelancers" },
+        ],
+        buttonText: "Upgrade to Pro",
+        isRecommended: true,
+    },
+    {
+        name: "Team",
+        price: 19.99,
+        description:
+            "Includes 1 TB shared storage, 1 GB per-file upload limit, team collaboration tools, admin controls, and audit logs.",
+        features: [
+            { title: "1 TB shared storage" },
+            { title: "1 GB max file upload" },
+            { title: "Team collaboration tools" },
+            { title: "Admin controls" },
+            { title: "Audit logging" },
+        ],
+        buttonText: "Upgrade to Team",
+        isPopular: true,
+    },
+    {
+        name: "Enterprise",
+        price: 49.99,
+        description:
+            "Custom storage limits, unlimited upload size, advanced security features, analytics, and dedicated support. Tailored for large organizations.",
+        features: [
+            { title: "Custom storage limits" },
+            { title: "Unlimited upload size" },
+            { title: "Advanced security features" },
+            { title: "Usage analytics" },
+            { title: "Dedicated support" },
+        ],
+        buttonText: "Upgrade to Enterprise",
+    },
 ];
 
 const UpgradePlanPage = () => {
     const [selectedBillingPeriod, setSelectedBillingPeriod] = useState("monthly");
-    const { initiateCheckout, isLoading } = useAuthStore();
+    const { initiateCheckout, isLoading, upgradePlanCheck } = useAuthStore();
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-6 py-16 text-primary">
@@ -336,7 +276,10 @@ const UpgradePlanPage = () => {
                                 variant={plan.isPopular ? "default" : "outline"}
                                 size="lg"
                                 className="w-full mt-6"
-                                onClick={() => initiateCheckout(plan.name)}
+                                onClick={async () => {
+                                    await upgradePlanCheck(plan.name);
+                                    initiateCheckout(plan.name);
+                                }}
                                 disabled={isLoading}
                             >
                                 {plan.buttonText}

@@ -11,20 +11,20 @@ export const storagePlans = {
         name: "Pro",
         price: 9.99,
         description: "Includes 100 GB of storage, 500 MB per-file upload limit, file versioning, and priority upload speed. Great for freelancers.",
-        storage: 10
+        storage: 100
     },
     'Team': {
         id: 3,
         name: "Team",
         price: 19.99,
         description: "Includes 1 TB shared storage, 1 GB per-file upload limit, team collaboration tools, admin controls, and audit logs.",
-        storage: 50
+        storage: 1000
     },
     'Enterprise': {
         id: 4,
         name: "Enterprise",
         price: 49.99,
         description: "Custom storage limits, unlimited upload size, advanced security features, analytics, and dedicated support. Tailored for large organizations.",
-        storagePlans: 100
+        storage: 5000
     }
 };

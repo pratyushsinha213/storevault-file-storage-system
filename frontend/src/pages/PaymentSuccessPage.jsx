@@ -26,7 +26,7 @@ const PaymentSuccessPage = () => {
                 Thank you for upgrading your plan. Your payment was processed successfully.
             </p>
             <Button asChild className="px-6 rounded-full">
-                <Link to="/dashboard">Go to Dashboard</Link>
+                <Link to="/">Go to Home</Link>
             </Button>
         </div>
     );

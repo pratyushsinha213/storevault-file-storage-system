@@ -76,6 +76,15 @@ const useAuthStore = create((set) => ({
             set({ isLoading: false });
         }
     },
+    upgradePlanCheck: async (tier) => {
+        try {
+            const response = await axiosInstance.post(`/users/upgrade-plan-check`, { newTier: tier });
+            return response.data?.message;
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Upgrade plan failed');
+            throw error;
+        }
+    },
     // New: initiate checkout session
     initiateCheckout: async (plan) => {
         set({ isLoading: true });
@@ -128,7 +137,7 @@ const useAuthStore = create((set) => ({
     handlePaymentCancelled: async (sessionId) => {
         set({ isLoading: true });
         try {
-            const response = await axiosInstance.post("/stripe/cancelled", null, {
+            const response = await axiosInstance.post("/payments/cancelled", null, {
                 params: { session_id: sessionId },
             });
             toast.info(response.data.message || "Payment cancelled.");

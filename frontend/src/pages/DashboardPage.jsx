@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
-import { FileText, MessageSquare, Database, ShieldCheck, Cloud } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { FileText, MessageSquare, Database, ShieldCheck, Cloud, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import useAuthStore from '@/store/useAuthStore';
 import formatBytes from '@/utils/formatBytes';
 import { Progress } from '@/components/ui/progress';
 import progressBar from '@/utils/progressBar';
 import { useNavigate } from 'react-router-dom';
+import { getInitialsFromName } from '@/utils/getInitialsFromName';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
 
 const mockUser = {
-    avatar: 'https://avatars.githubusercontent.com/u/12345678?v=4',
     lastLogin: '2 hours ago',
 };
 
@@ -22,6 +24,7 @@ const mockActivities = [
 const DashboardPage = () => {
 
     const { getProfileDetails, details } = useAuthStore();
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         getProfileDetails();
@@ -39,7 +42,7 @@ const DashboardPage = () => {
     const stats = [
         { icon: FileText, label: 'Files Uploaded', value: userFileDetails?.length, action: 'View Files', url: "/files" },
         { icon: MessageSquare, label: 'AI Prompts Used', value: 23, action: 'Go to Chat', url: "/ai-assistant" },
-        { icon: Database, label: 'Storage Used', value: `${formatBytes(totalSize)}/${formatBytes(userDetails?.storageLimit)}`, progressBar: <Progress className={`mt-2`} value={progressBar(totalSize, userDetails?.storageLimit)} />, percentage: `${Math.round((totalSize / userDetails?.storageLimit) * 100).toFixed(2)}`, action: 'Upgrade', url: "/upgrade-plan" },
+        { icon: Database, label: 'Storage Used', value: `${formatBytes(totalSize)}/${formatBytes(userDetails?.storageLimit)}`, progressBar: <Progress className={`mt-2`} value={progressBar(totalSize, userDetails?.storageLimit)} />, percentage: `${Math.round((totalSize / userDetails?.storageLimit) * 100)}`, action: 'Upgrade', url: "/upgrade-plan" },
         { icon: Cloud, label: 'Account Storage Tier', value: `${userDetails?.storageTier} Plan`, action: 'More Info', url: "/upgrade-plan" },
     ];
 
@@ -53,7 +56,23 @@ const DashboardPage = () => {
                     <h1 className="text-2xl font-semibold">Welcome back, {userDetails?.fullName} 👋</h1>
                     <p className="text-sm text-zinc-400">You last signed in {mockUser.lastLogin}</p>
                 </div>
-                <img src={mockUser.avatar} className="w-12 h-12 border rounded-full border-zinc-700" alt="avatar" />
+                {userDetails?.fullName && (
+                    <Avatar className="w-8 h-8 rounded-lg">
+                        <AvatarImage src={userDetails?.image} alt={userDetails?.fullName} />
+                        <AvatarFallback className="rounded-lg">{getInitialsFromName(userDetails?.fullName)}</AvatarFallback>
+                    </Avatar>
+                )}
+            </div>
+
+            <div className="relative flex items-center w-full mb-4">
+                <Search className="absolute left-3 size-5 text-zinc-400" />
+                <Input
+                    type="text"
+                    placeholder="Search files..."
+                    className="w-full py-2 pl-10 pr-4 text-sm text-white transition rounded-lg bg-zinc-800 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
             </div>
 
             {/* Stats Grid */}
@@ -97,12 +116,25 @@ const DashboardPage = () => {
 
             {/* Quick Actions */}
             <div>
-                <h2 className="mb-4 text-lg font-semibold text-zinc-300">Quick Actions</h2>
-                <div className="flex flex-wrap gap-4">
-                    <Button variant="default">🚀 Upload New File</Button>
-                    <Button variant="secondary">💬 Start New AI Chat</Button>
-                    <Button variant="outline">🧾 View File History</Button>
-                    <Button variant="ghost">⚙️ Go to Settings</Button>
+                <h2 className="mb-6 text-2xl font-bold text-zinc-200">Quick Actions</h2>
+
+                <div className="grid grid-cols-1 gap-6 mb-12 md:grid-cols-2 lg:grid-cols-4">
+                    {[
+                        { icon: "🚀", label: "Upload New File", url: "/files" },
+                        { icon: "💬", label: "Start New AI Chat", url: "/ai-assistant" },
+                        { icon: "🧾", label: "View File History", url: "/files" },
+                        { icon: "⚙️", label: "Go to Settings", url: "/settings" },
+                    ].map((action, idx) => (
+                        <Button
+                            key={idx}
+                            className="flex flex-col items-center justify-center h-24 px-6 py-4 text-lg transition-all shadow-md rounded-xl bg-zinc-800 hover:bg-zinc-700"
+                            variant="ghost"
+                            onClick={() => navigate(action.url)}
+                        >
+                            <span className="mb-2 text-3xl">{action.icon}</span>
+                            <span className="font-medium text-zinc-200">{action.label}</span>
+                        </Button>
+                    ))}
                 </div>
             </div>
         </div>

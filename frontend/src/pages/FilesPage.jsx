@@ -1,80 +1,13 @@
 /* eslint-disable no-unused-vars */
-// import React, { useEffect, useRef } from 'react';
-// import useFileStore from '@/store/useFileStore';
-// import FileCard from '@/components/ui/FileCard';
-
-// const FilesPage = () => {
-//     const fileInputRef = useRef(null);
-//     const { uploadFile, getAllFiles, deleteFile, files } = useFileStore();
-
-//     const handleUploadClick = () => fileInputRef.current?.click();
-
-//     const handleFileChange = async (e) => {
-//         const file = e.target.files?.[0];
-//         if (!file) return;
-
-//         const formData = new FormData();
-//         formData.append('file', file);
-//         await uploadFile(formData);
-//         await getAllFiles();
-//     };
-
-//     const handleDelete = async (fileId) => {
-//         await deleteFile(fileId);
-//         await getAllFiles();
-//     };
-
-//     useEffect(() => {
-//         getAllFiles();
-//     }, [getAllFiles]);
-
-//     return (
-//         <div className="p-6 text-primary">
-//             {/* Upload */}
-//             <div
-//                 className="flex items-center justify-center w-full max-w-4xl mx-auto mb-8 transition border-2 border-red-500 border-dashed cursor-pointer bg-zinc-900 rounded-xl h-36 hover:bg-zinc-800"
-//                 onClick={handleUploadClick}
-//             >
-//                 <input
-//                     ref={fileInputRef}
-//                     type="file"
-//                     name="file"
-//                     id="file"
-//                     className="hidden"
-//                     accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
-//                     onChange={handleFileChange}
-//                 />
-//                 <div className="text-center text-gray-500">
-//                     <p className="font-medium">Click to upload or drag files here</p>
-//                     <p className="text-xs text-gray-400">Supported formats: PDF, PNG, JPG, DOCX</p>
-//                 </div>
-//             </div>
-
-//             {/* File List */}
-//             <div className="max-w-6xl mx-auto">
-//                 <h2 className="mb-4 text-xl font-semibold">Your Files</h2>
-//                 {files?.length > 0 ? (
-//                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-//                         {files.map((file) => (
-//                             <FileCard key={file._id} file={file} onDelete={handleDelete} />
-//                         ))}
-//                     </div>
-//                 ) : (
-//                     <p className="text-sm text-muted-foreground">No files uploaded yet.</p>
-//                 )}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default FilesPage;
-
 import React, { useEffect, useRef, useState } from 'react';
 import useFileStore from '@/store/useFileStore';
 import FileCard from '@/components/ui/FileCard';
 import { UploadCloud, PlusCircle, Trash2, Search, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import UploadToast from '@/components/ui/UploadToast';
+import CreateFolderModal from '@/components/ui/CreateFolderModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import FolderCard from '@/components/ui/FolderCard';
 
 const FilesPage = () => {
     const fileInputRef = useRef(null);
@@ -83,50 +16,68 @@ const FilesPage = () => {
 
     const handleUploadClick = () => fileInputRef.current?.click();
 
+
     // const handleFileChange = async (e) => {
     //     const file = e.target.files?.[0];
     //     if (!file) return;
+
     //     const formData = new FormData();
     //     formData.append('file', file);
-    //     await uploadFile(formData);
-    //     await getAllFiles();
-    // };
 
+    //     let toastId;
+    //     let currentProgress = 0;
+
+    //     const updateToast = (progress, done = false) => {
+    //         if (toastId) {
+    //             setTimeout(() => {
+    //                 toast.dismiss(toastId); // remove old
+    //             }, 5000)
+    //         }
+
+    //         toastId = toast.custom((t) => (
+    //             <UploadToast file={file} progress={progress} isDone={done} />
+    //         ), { duration: Infinity, position: "bottom-right", id: file.name });
+    //     };
+
+    //     try {
+    //         await uploadFile(
+    //             formData,
+    //             (percent) => {
+    //                 currentProgress = percent;
+    //                 updateToast(percent);
+    //             },
+    //             () => updateToast(currentProgress, true)
+    //         );
+    //         await getAllFiles();
+    //     } catch (err) {
+    //         toast.error("Upload failed.");
+    //     }
+    // };
 
     const handleFileChange = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append("file", file);
 
-        let toastId;
-        let currentProgress = 0;
-
-        const updateToast = (progress, done = false) => {
-            if (toastId) {
-                setTimeout(() => {
-                    toast.dismiss(toastId); // remove old
-                }, 5000)
-            }
-
-            toastId = toast.custom((t) => (
-                <UploadToast file={file} progress={progress} isDone={done} />
-            ), { duration: Infinity, position: "bottom-right", id: file.name });
-        };
+        // Show loading toast
+        const toastId = toast.loading(`Uploading ${file.name}...`);
 
         try {
             await uploadFile(
                 formData,
                 (percent) => {
-                    currentProgress = percent;
-                    updateToast(percent);
-                },
-                () => updateToast(currentProgress, true)
+                    toast.message(`Uploading ${file.name}: ${percent.toFixed(0)}%`, {
+                        id: toastId,
+                    });
+                }
             );
+
             await getAllFiles();
+            toast.success(`${file.name} uploaded successfully!`, { id: toastId });
         } catch (err) {
-            toast.error("Upload failed.");
+            toast.error(`Failed to upload ${file.name}`, { id: toastId });
         }
     };
 
@@ -148,6 +99,8 @@ const FilesPage = () => {
         getAllFiles();
     }, [getAllFiles]);
 
+    const [showFolderModal, setShowFolderModal] = useState("");
+
     return (
         <div className="min-h-screen px-6 py-10 bg-black text-primary">
             {/* Header */}
@@ -162,12 +115,29 @@ const FilesPage = () => {
                         <Trash2 size={16} /> Clear All
                     </button>
 
-                    <button
+                    {/* <button
                         onClick={handleUploadClick}
                         className="flex items-center gap-1 px-4 py-2 text-sm font-medium transition rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
                     >
                         <UploadCloud size={16} /> Upload
-                    </button>
+                    </button> */}
+                    <CreateFolderModal open={showFolderModal} onClose={() => setShowFolderModal(false)} />
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button className="flex items-center gap-2 px-4 py-2 font-medium transition rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+                                <PlusCircle size={16} /> New
+                            </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="text-white bg-zinc-900">
+                            <DropdownMenuItem onClick={() => setShowFolderModal(true)}>
+                                📁 Create Folder
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleUploadClick}>
+                                📤 Upload File
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
 
@@ -220,9 +190,13 @@ const FilesPage = () => {
                             .filter((file) =>
                                 file.name.toLowerCase().includes(search.toLowerCase())
                             )
-                            .map((file) => (
-                                <FileCard key={file._id} file={file} onDelete={handleDelete} />
-                            ))}
+                            .map((file) =>
+                                file.isFolder ? (
+                                    <FolderCard key={file._id} folder={file} />
+                                ) : (
+                                    <FileCard key={file._id} file={file} onDelete={handleDelete} />
+                                )
+                            )}
                     </div>
                 ) : (
                     <div className="py-10 text-center text-zinc-500">

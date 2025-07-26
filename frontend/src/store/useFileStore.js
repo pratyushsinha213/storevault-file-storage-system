@@ -7,7 +7,7 @@ const useFileStore = create((set) => ({
     files: [],
     file: null,
     isLoading: false,
-    
+
     uploadFile: async (formData, onProgress, onComplete) => {
         try {
             const response = await axiosInstance.post('/files/upload', formData, {
@@ -72,7 +72,6 @@ const useFileStore = create((set) => ({
             set({ isLoading: false });
         }
     },
-
     // updateFile: async (fileId, updateData) => {
     //     // Placeholder — implement this when backend is ready
     //     toast.info("File update not implemented yet.");

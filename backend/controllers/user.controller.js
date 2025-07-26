@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { JWT_SECRET_KEY } from '../config/env.js';
 import File from '../models/File.js';
+import { randomAvatarGenerator } from '../utils/randomAvatarGenerator.js';
 // import { storagePlans } from '../utils/storagePlans.js';
 
 export const registerUser = async (req, res) => {
@@ -31,6 +32,8 @@ export const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'User already exists, please login.' })
         }
 
+        const randomAvatar = randomAvatarGenerator();
+
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hashedPassword) => {
                 if (err) {
@@ -41,6 +44,7 @@ export const registerUser = async (req, res) => {
                     fullName,
                     userName,
                     email,
+                    image: randomAvatar,
                     password: hashedPassword,
                     role: role || 'user', // Default to 'user' if no role is provided
                     lastLoginAt: new Date()
