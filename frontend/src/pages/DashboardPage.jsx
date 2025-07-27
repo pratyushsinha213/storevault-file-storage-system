@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 import { FileText, MessageSquare, Database, ShieldCheck, Cloud, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { getInitialsFromName } from '@/utils/getInitialsFromName';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
+import { NumberTicker } from '@/components/magicui/number-ticker';
+import { AnimatedGridPattern } from '@/components/magicui/animated-grid-pattern';
 
 const mockUser = {
     lastLogin: '2 hours ago',
@@ -40,9 +43,29 @@ const DashboardPage = () => {
 
 
     const stats = [
-        { icon: FileText, label: 'Files Uploaded', value: userFileDetails?.length, action: 'View Files', url: "/files" },
+        { icon: FileText, label: 'Files Uploaded', value: <>{userFileDetails?.length && <NumberTicker value={userFileDetails?.length} />}</>, action: 'View Files', url: "/files" },
         { icon: MessageSquare, label: 'AI Prompts Used', value: 23, action: 'Go to Chat', url: "/ai-assistant" },
-        { icon: Database, label: 'Storage Used', value: `${formatBytes(totalSize)}/${formatBytes(userDetails?.storageLimit)}`, progressBar: <Progress className={`mt-2`} value={progressBar(totalSize, userDetails?.storageLimit)} />, percentage: `${Math.round((totalSize / userDetails?.storageLimit) * 100)}`, action: 'Upgrade', url: "/upgrade-plan" },
+        // { icon: Database, label: 'Storage Used', value: `${formatBytes(totalSize)}/${formatBytes(userDetails?.storageLimit)}`, progressBar: <Progress className={`mt-2`} value={progressBar(totalSize, userDetails?.storageLimit)} />, percentage: `${Math.round((totalSize / userDetails?.storageLimit) * 100)}`, action: 'Upgrade', url: "/upgrade-plan" },
+        {
+            icon: Database, label: 'Storage Used', value: <>
+                <NumberTicker
+                    decimalPlaces={2}
+                    value={parseFloat(formatBytes(totalSize).split(" ")[0])}
+                /> {`${formatBytes(totalSize).split(" ")[1]}`}
+                {" / "}
+                {userDetails?.storageLimit ? (
+                    <>
+                        <NumberTicker
+                            decimalPlaces={0}
+                            value={parseFloat(formatBytes(userDetails.storageLimit).split(" ")[0])}
+                        />{" "}
+                        {formatBytes(userDetails.storageLimit).split(" ")[1]}
+                    </>
+                ) : (
+                    "Loading..."
+                )}
+            </>, progressBar: <Progress className={`mt-2`} value={progressBar(totalSize, userDetails?.storageLimit)} />, percentage: `${Math.round((totalSize / userDetails?.storageLimit) * 100)}`, action: 'Upgrade', url: "/upgrade-plan"
+        },
         { icon: Cloud, label: 'Account Storage Tier', value: `${userDetails?.storageTier} Plan`, action: 'More Info', url: "/upgrade-plan" },
     ];
 
@@ -50,6 +73,15 @@ const DashboardPage = () => {
 
     return (
         <div className="min-h-screen p-6 text-white bg-black">
+            <AnimatedGridPattern
+                numSquares={30}
+                maxOpacity={0.1}
+                duration={3}
+                repeatDelay={1}
+                className={cn(
+                    "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+                    "inset-x-0 inset-y-[-30%] min-h-screen skew-y-12",)}
+            />
             {/* Header */}
             <div className="flex items-center justify-between pb-6 mb-6 border-b border-zinc-800">
                 <div>

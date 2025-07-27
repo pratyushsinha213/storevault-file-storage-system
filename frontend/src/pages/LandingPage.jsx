@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Particles } from "@/components/ui/particles";
 import Footer from "@/components/footer";
 import { Link } from "react-router-dom";
 import DashboardPage from "./DashboardPage";
+import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 
 
 const features = [
@@ -52,13 +54,13 @@ const LandingPage = ({ isUserLoggedIn }) => {
         <>
             {isUserLoggedIn ? (
                 <>
-                    <Particles
+                    {/* <Particles
                         className="absolute inset-0 pointer-events-none"
                         quantity={100}
                         ease={80}
                         color={"#fff"}
                         refresh
-                    />
+                    /> */}
                     <DashboardPage />
                 </>
             ) : (

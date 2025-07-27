@@ -3,7 +3,7 @@ const fileRouter = Router();
 
 import isProtected from "../middlewares/isProtected.js";
 import upload from "../middlewares/upload.js";
-import { getAllFiles, uploadFile, getFileById, updateFile, deleteFile, createFolder, renameFolder } from '../controllers/file.controller.js';
+import { getAllFiles, uploadFile, getFileById, updateFile, deleteFile, createFolder, renameFolder, deleteFolder } from '../controllers/file.controller.js';
 
 fileRouter.use(isProtected);
 
@@ -17,5 +17,6 @@ fileRouter.put('/:id', updateFile);
 // Creating folder routes
 fileRouter.post('/folder', isProtected, createFolder);
 fileRouter.put('/folder/:id', isProtected, renameFolder);
+fileRouter.delete('/folder/:id', isProtected, deleteFolder);
 
 export default fileRouter;

@@ -26,7 +26,7 @@ const fileSchema = new mongoose.Schema({
         }
     },
     applicationPath: {
-        type: String // e.g., "root/documents/personal"
+        type: String // e.g., "fiLes/documents/personal"
     },
     size: {
         type: Number,

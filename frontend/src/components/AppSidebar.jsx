@@ -57,7 +57,7 @@ const AppSidebar = () => {
             navigate("/");
         }
     }
-        
+
     return (
         <>
             <Sidebar>

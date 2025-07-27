@@ -245,7 +245,7 @@ export const upgradePlanCheck = async (req, res) => {
 //         const userId = req.user.id;
 
 //         // Find parent folder to determine path
-//         let applicationPath = 'root';
+//         let applicationPath = 'fiLes';
 //         if (parentFolderId) {
 //             const parent = await File.findById(parentFolderId);
 //             if (!parent || !parent.isFolder) {
@@ -278,7 +278,7 @@ export const createFolder = async (req, res) => {
             ownerId: userId,
             name,
             isFolder: true,
-            applicationPath: "root"
+            applicationPath: "fiLes"
         });
 
         return res.status(201).json({ message: "Folder created", data: newFolder });
@@ -305,5 +305,22 @@ export const renameFolder = async (req, res) => {
         return res.status(200).json({ message: "Folder renamed", data: folder });
     } catch (error) {
         return res.status(500).json({ message: "Failed to rename folder", error: error.message });
+    }
+};
+
+export const deleteFolder = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { id } = req.params;
+
+        const folder = await File.findById(id);
+        if (!folder || !folder.isFolder) {
+            return res.status(404).json({ message: "Folder not found" });
+        }
+
+        await File.findByIdAndDelete(id);
+        return res.status(200).json({ message: "Folder Deleted Successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to delete folder", error: error.message });
     }
 };

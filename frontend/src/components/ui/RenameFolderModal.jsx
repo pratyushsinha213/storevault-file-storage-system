@@ -10,6 +10,7 @@ const RenameFolderModal = ({ open, onClose, folder }) => {
     const [newName, setNewName] = useState(folder?.name || "");
     const { getAllFiles } = useFileStore();
 
+
     const handleRename = async () => {
         try {
             await axiosInstance.put(`/files/folder/${folder._id}`, { name: newName });
