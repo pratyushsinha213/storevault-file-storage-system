@@ -2,7 +2,7 @@ import React from 'react'
 import { Separator } from './ui/separator'
 import { Button } from './ui/button'
 import { Link } from 'react-router-dom'
-import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react"
+import { CircleCheckIcon, CircleHelpIcon, CircleIcon, Menu } from "lucide-react"
 
 import {
     NavigationMenu,
@@ -14,6 +14,7 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { IconBrandGithub, IconDatabase } from '@tabler/icons-react'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet'
 
 const components = [
     {
@@ -81,7 +82,7 @@ const Header = ({ isUserLoggedIn }) => {
             {!isUserLoggedIn && (
                 <a href="/">
                     <div className='flex items-center gap-3 px-2 py-3 ml-3 text-2xl font-bold'>
-                        <IconDatabase />
+                        <img src="/favicon.png" className="size-6" />
                         <span>StoreVault</span>
                     </div>
                 </a>
@@ -89,7 +90,7 @@ const Header = ({ isUserLoggedIn }) => {
             <div className="flex items-center justify-center w-full gap-1 px-4 lg:gap-2 lg:px-6">
                 <Separator orientation="vertical" className="h-4 mx-2" />
                 <div>
-                    <NavigationMenu viewport={false}>
+                    {/* <NavigationMenu viewport={false}>
                         <NavigationMenuList>
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger>Home</NavigationMenuTrigger>
@@ -222,7 +223,7 @@ const Header = ({ isUserLoggedIn }) => {
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
                         </NavigationMenuList>
-                    </NavigationMenu>
+                    </NavigationMenu> */}
                 </div>
                 <div className="flex items-center gap-2 ml-auto">
                     {!isUserLoggedIn && (
@@ -254,6 +255,42 @@ const Header = ({ isUserLoggedIn }) => {
                             </Button>
                         </div>
                     )}
+                </div>
+                <div className="sm:hidden">
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <Menu className="w-5 h-5" />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="right" className="text-white bg-black">
+                            <SheetHeader>
+                                <SheetTitle className="text-xl font-bold">Menu</SheetTitle>
+                            </SheetHeader>
+                            <div className="mt-4 space-y-4">
+                                {!isUserLoggedIn && (
+                                    <div className="space-y-2">
+                                        <Button variant="outline" className="w-full" asChild>
+                                            <Link to="/login">Login</Link>
+                                        </Button>
+                                        <Button variant="outline" className="w-full" asChild>
+                                            <Link to="/register">Register</Link>
+                                        </Button>
+                                        <Button variant="ghost" className="w-full" asChild>
+                                            <a
+                                                href="https://github.com/pratyushsinha213/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <IconBrandGithub className="inline-block mr-2" />
+                                                GitHub
+                                            </a>
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </SheetContent>
+                    </Sheet>
                 </div>
             </div>
         </header>

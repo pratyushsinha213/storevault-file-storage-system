@@ -17,6 +17,8 @@ import Header from './components/Header'
 import UpgradePlanPage from './pages/UpgradePlanPage'
 import PaymentSuccessPage from './pages/PaymentSuccessPage'
 import PaymentCancelledPage from './pages/PaymentCancelledPage'
+import AccountSettingsPage from './pages/AccountSettingsPage'
+import SettingsPage from './pages/SettingsPage'
 
 
 const App = () => {
@@ -50,25 +52,29 @@ const App = () => {
                             path="/register"
                             element={!user ? <RegisterPage /> : <Navigate to="/" />}
                         />
-                        <Route
-                            path='/files'
-                            element={user ? <FilesPage /> : <Navigate to="/" />}
-                        />
-                        <Route
-                            path='/ai-assistant'
-                            element={<AIChatPage />}
-                        />
-                        {/* <Route
-                            path='/dashboard'
-                            element={<DashboardPage />}
-                        /> */}
-                        <Route path="/upgrade-plan" element={<UpgradePlanPage />} />
-                        <Route path="/upgrade-plan/payments/success" element={<PaymentSuccessPage />} />
-                        <Route path="/upgrade-plan/payments/cancelled" element={<PaymentCancelledPage />} />
-                        {/* <Route
-                            path='/analytics'
-                            element={user ? <AnalyticsPage /> : <Navigate to="/" />}
-                        /> */}
+                        {user && (
+                            <>
+                                <Route
+                                    path='/files'
+                                    element={<FilesPage />}
+                                />
+                                <Route
+                                    path='/ai-assistant'
+                                    element={<AIChatPage />}
+                                />
+                                <Route path='/settings' element={<SettingsPage />} />
+                                <Route path='/settings/account' element={<AccountSettingsPage />} />
+
+                                <Route path="/upgrade-plan" element={<UpgradePlanPage />} />
+                                <Route path="/upgrade-plan/payments/success" element={<PaymentSuccessPage />} />
+                                <Route path="/upgrade-plan/payments/cancelled" element={<PaymentCancelledPage />} />
+
+                                <Route
+                                    path='/analytics'
+                                    element={<AnalyticsPage />}
+                                />
+                            </>
+                        )}
                         <Route
                             path="/*"
                             element={<Custom404ErrorPage />}

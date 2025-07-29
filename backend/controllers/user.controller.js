@@ -140,6 +140,40 @@ export const getProfile = async (req, res) => {
     }
 }
 
+export const updateProfile = async (req, res) => {
+    const { id } = req.user.id;
+    const { password, confirmPassword, fullName, email, image } = req.body;
+
+    try {
+        const user = await User.findById(id).select("fullName email password image");
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: 'Passwords do not match' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        user.password = hashedPassword;
+        user.fullName = fullName || user.fullName;
+        user.email = email || user.email;
+        user.image = image || user.image;
+        await user.save();
+
+        return res.status(200).json({
+            message: 'User profile updated successfully',
+            success: true,
+            data: user
+        });
+
+    } catch (error) {
+
+    }
+}
+
 export const getProfileDetails = async (req, res) => {
     try {
         const userDetails = await User.findById(req.user.id).select('-password');

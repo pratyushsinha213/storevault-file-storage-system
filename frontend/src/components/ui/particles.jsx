@@ -15,6 +15,27 @@ const variantStyles = {
     opacity: 0.8,
     color: "#FFFFFF",
   },
+  files: {
+    count: 50,
+    size: 15, // Increase size for visibility
+    speed: 1.5,
+    opacity: 0.9,
+    color: "#FFFFFF",
+    options: {
+      particles: {
+        shape: {
+          type: "image",
+          image: [
+            {
+              src: "/favicon.png", // Path to your file icon
+              width: 32,
+              height: 32,
+            },
+          ],
+        },
+      },
+    },
+  },
   snow: {
     count: 300,
     size: 1.2,

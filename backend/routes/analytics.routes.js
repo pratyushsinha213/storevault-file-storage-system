@@ -1,13 +1,14 @@
 import { Router } from "express";
 const analyticsRouter = Router();
 
-import { trackAnalytics, getRealtimeStats, getDailyStats, getTopPages } from '../controllers/analytics.controller.js';
+import { getFileTypeDistribution, getStorageUsage, getTopFiles, getUploadActivity, } from '../controllers/analytics.controller.js';
 import isProtected from '../middlewares/isProtected.js';
-import isAdmin from '../middlewares/isAdmin.js';
 
-analyticsRouter.post('/track', trackAnalytics);
-analyticsRouter.get('/realtime', isProtected, isAdmin, getRealtimeStats);
-analyticsRouter.get('/stats/daily', isProtected, isAdmin, getDailyStats);
-analyticsRouter.get('/stats/top-pages', isProtected, isAdmin, getTopPages);
+
+
+analyticsRouter.get('/storage', isProtected, getStorageUsage);
+analyticsRouter.get('/uploads', isProtected, getUploadActivity);
+analyticsRouter.get('/file-types', isProtected, getFileTypeDistribution);
+analyticsRouter.get('/top-files', isProtected, getTopFiles);
 
 export default analyticsRouter;

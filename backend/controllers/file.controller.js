@@ -34,6 +34,7 @@ export const uploadFile = async (req, res) => {
 
         const userId = req.user.id;
         const { originalname, mimetype, size, buffer } = req.file;
+        const { folderId } = req.body;
 
         // Fetch user details
         const user = await User.findById(userId).select('fullName storageUsed storageLimit storageTier');
@@ -63,7 +64,7 @@ export const uploadFile = async (req, res) => {
             path: s3Path, // S3 key or URL
             size,
             mimeType: mimetype,
-            // folderId, // Add if you support folders
+            folderId, // Add if you support folders
             version: 1,
             current: true,
             permissions: {
@@ -239,53 +240,58 @@ export const upgradePlanCheck = async (req, res) => {
 };
 
 
-// export const createFolder = async (req, res) => {
-//     try {
-//         const { name, parentFolderId } = req.body;
-//         const userId = req.user.id;
-
-//         // Find parent folder to determine path
-//         let applicationPath = 'fiLes';
-//         if (parentFolderId) {
-//             const parent = await File.findById(parentFolderId);
-//             if (!parent || !parent.isFolder) {
-//                 return res.status(400).json({ message: "Invalid parent folder." });
-//             }
-//             applicationPath = `${parent.applicationPath}/${parent.name}`;
-//         }
-
-//         const folderDoc = await File.create({
-//             ownerId: userId,
-//             name,
-//             isFolder: true,
-//             folderId: parentFolderId || null,
-//             applicationPath
-//         });
-
-//         return res.status(201).json({ message: "Folder created successfully", data: folderDoc });
-//     } catch (error) {
-//         return res.status(500).json({ message: "Failed to create folder", error: error.message });
-//     }
-// };
-
-// POST /files/folders
 export const createFolder = async (req, res) => {
     try {
+        const { name, parentFolderId } = req.body;
         const userId = req.user.id;
-        const { name } = req.body;
 
-        const newFolder = await File.create({
+        // Find parent folder to determine path
+        let applicationPath = 'fiLes';
+        if (parentFolderId) {
+            const parent = await File.findById(parentFolderId);
+            if (!parent || !parent.isFolder) {
+                return res.status(400).json({ message: "Invalid parent folder." });
+            }
+            applicationPath = `${parent.applicationPath}/${parent.name}`;
+        }
+
+        // const existing = await File.findOne({ ownerId: userId, name: originalname, folderId: folderId || null });
+        // if (existing) {
+        //     return res.status(400).json({ message: 'A file with this name already exists in this folder.' });
+        // }
+
+        const folderDoc = await File.create({
             ownerId: userId,
             name,
             isFolder: true,
-            applicationPath: "fiLes"
+            folderId: parentFolderId || null,
+            applicationPath
         });
 
-        return res.status(201).json({ message: "Folder created", data: newFolder });
+        return res.status(201).json({ message: "Folder created successfully", data: folderDoc });
     } catch (error) {
         return res.status(500).json({ message: "Failed to create folder", error: error.message });
     }
 };
+
+// POST /files/folders
+// export const createFolder = async (req, res) => {
+//     try {
+//         const userId = req.user.id;
+//         const { name } = req.body;
+
+//         const newFolder = await File.create({
+//             ownerId: userId,
+//             name,
+//             isFolder: true,
+//             applicationPath: "fiLes"
+//         });
+
+//         return res.status(201).json({ message: "Folder created", data: newFolder });
+//     } catch (error) {
+//         return res.status(500).json({ message: "Failed to create folder", error: error.message });
+//     }
+// };
 
 // PATCH /files/folders/:id
 export const renameFolder = async (req, res) => {

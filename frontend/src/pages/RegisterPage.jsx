@@ -44,7 +44,7 @@ const RegisterPage = () => {
                 <div className="flex justify-center gap-2 md:justify-start">
                     <Link to={'/'} className="flex items-center gap-2 font-medium">
                         <div className="flex items-center justify-center rounded-md bg-primary text-primary-foreground size-6">
-                            <IconDatabase className="size-4" />
+                            <img src="/favicon.png" className="size-4"/>
                         </div>
                         StoreVault
                     </Link>

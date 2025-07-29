@@ -1,6 +1,9 @@
 import React from 'react';
 import { Eye, Download, Trash2 } from 'lucide-react';
 import formatBytes from '@/utils/formatBytes';
+import { Document, Page, pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const FileCard = ({ file, onDelete }) => {
     const isImage = file.mimeType.startsWith('image/');
@@ -20,7 +23,7 @@ const FileCard = ({ file, onDelete }) => {
                     <iframe
                         src={file.viewUrl}
                         title={file.name}
-                        className="w-full h-full"
+                        className="object-cover w-full h-full"
                     />
                 ) : (
                     <div className="flex items-center justify-center w-full h-full text-sm text-gray-400">
