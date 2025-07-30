@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow all origins
+  origin: '*', // or restrict to Vercel frontend domain
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
   credentials: true, // Allow cookies to be sent with requests
@@ -34,7 +34,7 @@ app.use('/api/v1/payments', stripeRouter);
 //   res.json({ value });
 // });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT} (Press CTRL+C to stop)`);
   connectToDatabase();
 })
