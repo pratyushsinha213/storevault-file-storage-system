@@ -103,16 +103,18 @@ A modern, full-stack file storage and management system with AI-powered features
 3. **Environment Configuration**
    Create a `.env` file in the backend directory:
    ```env
+   NODE_ENV="development"
+   CLIENT_BASE_URL="http://localhost:5173"
    PORT=5500
-   MONGODB_URI=mongodb://localhost:27017/storevault
-   JWT_SECRET=your_jwt_secret_here
-   AWS_ACCESS_KEY_ID=your_aws_access_key
-   AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-   AWS_REGION=your_aws_region
-   AWS_S3_BUCKET=your_s3_bucket_name
-   STRIPE_SECRET_KEY=your_stripe_secret_key
-   STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-   GOOGLE_AI_API_KEY=your_google_ai_api_key
+   MONGO_URI="mongodb://127.0.0.1:27017/storevault"
+   JWT_SECRET_KEY="your_secret_key_here"
+   AWS_S3_BUCKET_NAME="your_bucket_name"
+   AWS_S3_REGION="your_region"
+   AWS_ACCESS_KEY_ID="your_access_key_id"
+   AWS_SECRET_ACCESS_KEY="your_secret_access_key"
+   GEMINI_AI_API_KEY="your_gemini_key"
+   STRIPE_PUBLISHABLE_KEY="your_publishable_key"
+   STRIPE_SECRET_KEY="your_secret_key"
    ```
 
 4. **Start the backend server**
