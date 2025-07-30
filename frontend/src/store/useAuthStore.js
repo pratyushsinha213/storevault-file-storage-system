@@ -46,6 +46,10 @@ const useAuthStore = create((set) => ({
             const response = await axiosInstance.get('/users/profile');
             set({ user: response.data?.data, isAuthenticated: true });
         } catch (error) {
+            // Don't show error toast for 401 - user just isn't logged in
+            if (error.response?.status !== 401) {
+                console.error('Auth check error:', error);
+            }
             set({ user: null, isAuthenticated: false });
         } finally {
             set({ isCheckingAuth: false });
