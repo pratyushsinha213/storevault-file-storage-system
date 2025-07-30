@@ -139,7 +139,7 @@ const PaymentSuccessPage = () => {
                                 <div className="flex items-center justify-center gap-2 p-3 border rounded-lg bg-zinc-800/50 border-zinc-700">
                                     <span className="text-xs text-zinc-400">Transaction ID:</span>
                                     <Badge variant="outline" className="text-xs border-zinc-600 text-zinc-300">
-                                        {session_id.slice(0, 8)}...
+                                        {session_id.slice(0, 12)}...
                                     </Badge>
                                 </div>
                             )}
@@ -152,7 +152,7 @@ const PaymentSuccessPage = () => {
                             asChild 
                             className="px-8 py-3 text-white transition-all duration-200 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-xl hover:scale-105"
                         >
-                            <Link to="/dashboard" className="flex items-center gap-2">
+                            <Link to="/" className="flex items-center gap-2">
                                 <Home className="w-4 h-4" />
                                 Go to Dashboard
                                 <ArrowRight className="w-4 h-4" />

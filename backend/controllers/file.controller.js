@@ -27,7 +27,7 @@ export const formatBytes = (bytes, decimals = 2) => {
 
 export const uploadFile = async (req, res) => {
     try {
-        console.log(req.file);
+        // console.log(req.file);
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }

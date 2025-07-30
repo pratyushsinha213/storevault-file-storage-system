@@ -19,8 +19,6 @@ const useAnalyticsStore = create((set) => ({
                 axiosInstance.get("/analytics/top-files", { params: { limit } }),
                 axiosInstance.get("/analytics/file-types"),
             ]);
-
-            console.log(storageResult.data.data);
             set({
                 storageStats: storageResult.data.data,
                 uploadStats: uploadsResult.data.data,

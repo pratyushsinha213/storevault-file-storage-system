@@ -21,6 +21,7 @@ const users = [
   { fullName: 'Nina Simone', userName: 'ninas', email: 'nina@example.com', password: 'password123', role: 'user' },
   { fullName: 'Oscar Wilde', userName: 'oscarw', email: 'oscar@example.com', password: 'password123', role: 'user' },
   { fullName: 'Pratyush Sinha', userName: 'prat', email: 'prat@sinha.com', password: 'Prat@123', role: 'admin' },
+  { fullName: 'Dan Anderson', userName: 'dan', email: 'dan@anderson.com', password: 'Dan@123', role: 'user', image: "https://avatar.iran.liara.run/public/85" },
 ];
 
 async function seed() {

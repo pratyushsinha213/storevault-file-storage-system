@@ -6,14 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatedGridPattern } from '@/components/magicui/animated-grid-pattern';
 import { cn } from '@/lib/utils';
-import { 
-    Check, 
-    Crown, 
-    Star, 
-    Zap, 
-    Shield, 
-    Users, 
-    Building, 
+import {
+    Check,
+    Crown,
+    Star,
+    Zap,
+    Shield,
+    Users,
+    Building,
     Sparkles,
     ArrowRight,
     CreditCard,
@@ -147,14 +147,14 @@ const UpgradePlanPage = () => {
                             className="w-fit"
                         >
                             <TabsList className="h-12 px-2 border rounded-xl bg-zinc-900/50 backdrop-blur-sm border-zinc-700">
-                                <TabsTrigger 
-                                    value="monthly" 
+                                <TabsTrigger
+                                    value="monthly"
                                     className="px-6 py-2 rounded-lg data-[state=active]:bg-white data-[state=active]:text-black transition-all"
                                 >
                                     Monthly
                                 </TabsTrigger>
-                                <TabsTrigger 
-                                    value="yearly" 
+                                <TabsTrigger
+                                    value="yearly"
                                     className="px-6 py-2 rounded-lg data-[state=active]:bg-white data-[state=active]:text-black transition-all"
                                 >
                                     <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ const UpgradePlanPage = () => {
                 <div className="mx-auto max-w-7xl">
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                         {plans.map((plan, index) => (
-                            <Card 
+                            <Card
                                 key={plan.name}
                                 className={cn(
                                     "relative border-zinc-800 bg-zinc-900/50 backdrop-blur-sm hover:bg-zinc-900/70 transition-all duration-300 hover:scale-105",
@@ -211,8 +211,8 @@ const UpgradePlanPage = () => {
                                     <div className="text-center">
                                         <div className="flex items-baseline justify-center gap-2">
                                             <span className="text-4xl font-bold">
-                                                ${selectedBillingPeriod === "monthly" 
-                                                    ? plan.price 
+                                                ${selectedBillingPeriod === "monthly"
+                                                    ? plan.price
                                                     : getYearlyPrice(plan.price).toFixed(2)
                                                 }
                                             </span>
@@ -233,8 +233,8 @@ const UpgradePlanPage = () => {
                                             <div key={featureIndex} className="flex items-center gap-3">
                                                 <div className={cn(
                                                     "flex items-center justify-center w-5 h-5 rounded-full",
-                                                    feature.included 
-                                                        ? "bg-green-500/20 text-green-400" 
+                                                    feature.included
+                                                        ? "bg-green-500/20 text-green-400"
                                                         : "bg-zinc-700/50 text-zinc-500"
                                                 )}>
                                                     {feature.included ? (
@@ -262,10 +262,8 @@ const UpgradePlanPage = () => {
                                                 : "bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700"
                                         )}
                                         onClick={async () => {
-                                            if (plan.name !== "Free") {
-                                                await upgradePlanCheck(plan.name);
-                                                initiateCheckout(plan.name);
-                                            }
+                                            await upgradePlanCheck(plan.name);
+                                            initiateCheckout(plan.name);
                                         }}
                                         disabled={isLoading}
                                     >

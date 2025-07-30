@@ -446,20 +446,20 @@ const integrationItems = [
     }
 ]
 
-const secondaryMenuItems = [
-    {
-        title: "Settings",
-        url: "/settings",
-        icon: IconSettings,
-        description: "Account preferences"
-    },
-    {
-        title: "Search",
-        url: "/search",
-        icon: IconSearch,
-        description: "Find files quickly"
-    },
-]
+// const secondaryMenuItems = [
+//     {
+//         title: "Settings",
+//         url: "/settings",
+//         icon: IconSettings,
+//         description: "Account preferences"
+//     },
+//     {
+//         title: "Search",
+//         url: "/search",
+//         icon: IconSearch,
+//         description: "Find files quickly"
+//     },
+// ]
 
 const AppSidebar = () => {
     const { isMobile } = useSidebar();
@@ -755,7 +755,7 @@ const AppSidebar = () => {
                     </SidebarGroup>
 
                     {/* Tools */}
-                    <SidebarGroup>
+                    {/* <SidebarGroup>
                         <SidebarGroupLabel className="px-2 mb-6 text-xs font-semibold tracking-wider uppercase text-zinc-400">
                             Tools
                         </SidebarGroupLabel>
@@ -796,7 +796,7 @@ const AppSidebar = () => {
                                 ))}
                             </SidebarMenu>
                         </SidebarGroupContent>
-                    </SidebarGroup>
+                    </SidebarGroup> */}
                 </SidebarContent>
 
                 <SidebarFooter className="p-2 border-t border-zinc-700/50">
