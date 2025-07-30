@@ -78,6 +78,7 @@ const useAuthStore = create((set) => ({
         set({ isLoading: true });
         try {
             const response = await axiosInstance.get('/users/get-profile-details');
+            console.log(response.data.data)
             set({ details: response.data?.data });
         } catch (error) {
             toast.error("Failed to fetch profile details");
