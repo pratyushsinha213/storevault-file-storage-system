@@ -25,6 +25,12 @@ app.use(cors({
   credentials: true, // Allow cookies to be sent with requests
 }));
 
+// Debug middleware to log all requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+  next();
+});
+
 app.use('/api/v1/files', fileRouter);
 app.use('/api/v1/analytics', analyticsRouter);
 app.use('/api/v1/users', userRouter);
