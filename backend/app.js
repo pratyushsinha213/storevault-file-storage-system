@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 const app = express();
 
-import {PORT} from './config/env.js';
+import { PORT } from './config/env.js';
 import connectToDatabase from './config/db.js';
 import fileRouter from './routes/file.routes.js';
 import analyticsRouter from './routes/analytics.routes.js';
@@ -23,7 +23,7 @@ app.use(cors({
 }));
 
 app.use('/api/v1/files', fileRouter);
-app.use('/api/v1/analytics', analyticsRouter); 
+app.use('/api/v1/analytics', analyticsRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/ai-assistant', aiRouter);
 app.use('/api/v1/payments', stripeRouter);
@@ -35,6 +35,6 @@ app.use('/api/v1/payments', stripeRouter);
 // });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT} (Press CTRL+C to stop)`);
-    connectToDatabase();
+  console.log(`Server is running on http://localhost:${PORT} (Press CTRL+C to stop)`);
+  connectToDatabase();
 })

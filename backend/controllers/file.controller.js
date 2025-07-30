@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import File from '../models/File.js';
 import { uploadToS3, getSignedUrlFromS3, deleteFromS3 } from '../services/s3Service.js';
 import User from '../models/User.js';
-import { aiQueue } from '../services/aiQueue.js';
+// import { aiQueue } from '../services/aiQueue.js';
 
 const generateUniqueFileName = (originalname) => {
     const ext = originalname.split('.').pop();

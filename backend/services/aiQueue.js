@@ -1,6 +1,6 @@
-import { Queue } from 'bullmq';
-import redis from './redisClient.js';
+// import { Queue } from 'bullmq';
+// import redis from './redisClient.js';
 
-const connection = redis.options;
+// const connection = redis.options;
 
-export const aiQueue = new Queue('ai-tasks', { connection }); 
+// export const aiQueue = new Queue('ai-tasks', { connection }); 
