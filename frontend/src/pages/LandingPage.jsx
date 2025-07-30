@@ -36,7 +36,7 @@ import {
     ChevronLeft
 } from "lucide-react";
 import { Particles } from "@/components/ui/particles";
-import Footer from "@/components/footer";
+import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import DashboardPage from "./DashboardPage";
 import { LineGraph } from "@/components/ui/LineGraph";

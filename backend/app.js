@@ -15,6 +15,9 @@ import stripeRouter from './routes/stripe.routes.js';
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigin = process.env.NODE_ENV === "environment" ? process.env.CLIENT_BASE_URL : "http://localhost:5173"; 
+
 app.use(cors({
   origin: '*', // or restrict to Vercel frontend domain
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods

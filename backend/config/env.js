@@ -3,7 +3,7 @@ import { config } from "dotenv";
 config({path: ".env"});
 
 export const {
-    CLIENT_BASE_URL, PORT,
+    CLIENT_BASE_URL, PORT, NODE_
     MONGO_URI,
     JWT_SECRET_KEY,
     AWS_S3_BUCKET_NAME, AWS_S3_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
